@@ -1,0 +1,94 @@
+select * from movies;
+
+select title, movieid
+from movies
+limit 10;
+
+select title, movieid
+from movies
+where movieid = '485';
+
+select title
+from movies
+where lower(title) like  '%made in amer%';
+
+select title
+from movies
+order by title asc
+limit 10;
+
+select title
+from movies
+where lower(title) like '%2002%';
+
+select title
+from movies
+where lower(title) like '%godfather%';
+
+select genres
+from movies
+where lower(genres) like '%comedy%';
+
+select title, genres
+from movies
+where lower(title) like '%2000%' and lower(genres) like '%comedy%';
+
+select title, genres
+from movies
+where lower(title) like '%death%' and lower(genres) like '%comedy%';
+
+select title
+from movies
+where lower(title) like '%super%' and lower(title) like '%2001%' or lower(title) like '%2002%';
+
+select m.title, r.rating
+from movies m
+inner join ratings r on m.movieid = r.movieid
+where lower(title) like '%godfather%' and r.rating > 0;
+
+select m.title, r.rating, r.timestamp
+from movies m
+inner join ratings r on m.movieid = r.movieid
+where lower(title) like '%godfather%' and r.rating > 0
+order by r.timestamp desc;
+
+select m.title, l.imdbid, l.tmdbid
+from movies m
+inner join links l on m.movieid = l.movieid
+where lower(title) like '%comedy%' and m.title like '%2005%' and
+l.imdbid != 0 and l.tmdbid !=0;
+
+select m.title, r.rating
+from movies m
+left join ratings r on m.movieid = r.movieid
+where r.rating ISNULL;
+
+select m.title, g.id
+from movies m
+inner join movie_genre mg on m.movieid = mg.movieid
+inner join genre g on mg.genre_id = g.id
+where g.id = '15';
+
+select concat('http://www.imdb.com/title/tt', links.imdbid)
+from links;
+
+select concat('http://www.imdb.com/title/tt', links.tmdbid)
+from links;
+
+select timestamp with Time Zone 'epoch' + r.timestamp * INTERVAL '1 second'
+from ratings r
+order by r.timestamp desc;
+
+select lower(t.tag)
+from tags t;
+
+UPDATE tags
+SET tag=LOWER(REPLACE(tag, ' ', '_'));
+
+select  m.genres, g.genres, g.id
+from movies m, genre g
+where m.genres = g.genres
+group by m.genres, g.id
+order by g.id asc;
+
+
